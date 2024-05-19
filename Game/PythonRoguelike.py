@@ -553,11 +553,11 @@ def wave_handler():
         wave += 1
         can.itemconfig(waveDisplay, text="VAGUE "+str(wave))
 
-        # if wave%2==1 and wave != 1:
-        #     show_upgrade_screen()
-
-        if wave != 0 and wave != 1:
+        if wave%2==1 and wave != 1:
             show_upgrade_screen()
+
+        # if wave != 0 and wave != 1:
+        #     show_upgrade_screen()
 
         while gameStopped:
             pass
