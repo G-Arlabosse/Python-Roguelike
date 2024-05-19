@@ -402,17 +402,16 @@ class MageEnemy(ClassicEnemy):
 ## Boss ?
 
 def upgrade_picker(n, luck):
-    global temp_common_upgrades, temp_rare_upgrades, temp_epic_upgrades, temp_legendary_upgrades
+    global temp_common_upgrades, temp_rare_upgrades, temp_epic_upgrades, temp_legendary_upgrades, temp_one_time_upgrades
     picked = []
     for _ in range(n):
         u = None
         while u == None:
-            print("loop cycle !")
             r = randint(1,100)
-            if r<=50:
-                if one_time_upgrades_list != []:
-                    u = choice(one_time_upgrades_list)
-                    one_time_upgrades_list.remove(u)
+            if r<=4:
+                if temp_one_time_upgrades != []:
+                    u = choice(temp_one_time_upgrades)
+                    temp_one_time_upgrades.remove(u)
             elif r<=7:
                 if temp_legendary_upgrades != []:
                     u = choice(temp_legendary_upgrades)
@@ -455,7 +454,7 @@ def upgrade_tooltips(upgrade):
         return "+1 Choix d'amélioration"
 
 def show_upgrade_screen():
-    global gameStopped, temp_common_upgrades, temp_rare_upgrades, temp_epic_upgrades, temp_legendary_upgrades
+    global gameStopped, temp_common_upgrades, temp_rare_upgrades, temp_epic_upgrades, temp_legendary_upgrades,temp_one_time_upgrades
 
     gameStopped = True
     listPos = [(0.5*BOARD_SIZE+0.3*BOARD_SIZE*cos(pi/2+i*2*pi/nbUpgradesShown),0.5*BOARD_SIZE-0.3*BOARD_SIZE*sin(pi/2+i*2*pi/nbUpgradesShown)) for i in range(nbUpgradesShown)]
@@ -464,6 +463,7 @@ def show_upgrade_screen():
     temp_rare_upgrades = deepcopy(rare_upgrades_list)
     temp_epic_upgrades = deepcopy(epic_upgrades_list)
     temp_legendary_upgrades = deepcopy(legendary_upgrades_list)
+    temp_one_time_upgrades = deepcopy(one_time_upgrades_list)
 
     upgrades_list = upgrade_picker(nbUpgradesShown, 1)
 
@@ -504,6 +504,7 @@ def select_upgrade(upgrade):
         playerArcMult *= 1.8
         playerFiringSpeedMult *= 0.7
         playerDmgMult *= 0.8
+        one_time_upgrades_list.remove(upgrade)
     elif upgrade == "FiringSpeed":
         playerFiringSpeedMult *= 1.08
     elif upgrade == "PlayerSpeed":
@@ -514,6 +515,7 @@ def select_upgrade(upgrade):
         playerRegenMult *= 1.20
     elif upgrade[:-1] == "UpgradeSlots":
         nbUpgradesShown += 1
+        one_time_upgrades_list.remove(upgrade)
 
     gameStopped = False
 
